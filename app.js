@@ -106,7 +106,7 @@ app.post("/webhook", (req, res) => {
 
       // Gets the body of the webhook event
       let webhookEvent = entry.messaging[0];
-      // console.log(webhookEvent);
+      console.log(webhookEvent);
 
       // Discard uninteresting events
       if ("read" in webhookEvent) {
