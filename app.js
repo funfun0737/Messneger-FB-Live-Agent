@@ -47,6 +47,8 @@ app.get("/", function(_req, res) {
 
 // Adds support for GET requests to our webhook
 app.get("/webhook", (req, res) => {
+
+  //HZTest
   // Parse the query params
   let mode = req.query["hub.mode"];
   let token = req.query["hub.verify_token"];
