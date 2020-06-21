@@ -9,8 +9,7 @@
     "suggestion": "Outfit suggestions",
     "shop": "Shop now",
     "start_over": "Start over",
-    "takeSurvey": "Sure, take a survey",
-    "maybeLater": "Maybe later"
+    "takeSurvey": "Take a survey",
   },
   "get_started": {
     "welcome": "Hi {{userFirstName}}! Welcome to Who Am I where you'll find your true self.",
