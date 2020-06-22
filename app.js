@@ -84,9 +84,11 @@ app.post("/webhook", (req, res) => {
       if (entry.standby){
         webhookEvent = entry.standby[0];
         console.log("HZTest webhookEvent standby"+webhookEvent);
+        return Response.genText("Hi, I am your counselor Yuki, shall we talk");
       }else{
         webhookEvent = entry.messaging[0];
         console.log("HZTest webhookEvent messaging"+webhookEvent);
+        return Response.genText("Hi, I am your counselor Yuki, shall we talk?");
       }
     });
   } else {
