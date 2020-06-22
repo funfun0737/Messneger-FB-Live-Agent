@@ -105,8 +105,13 @@ app.post("/webhook", (req, res) => {
       }
 
       // Gets the body of the webhook event
-      let webhookEvent = entry.messaging[0];
-      console.log("HZTest "+webhookEvent.standby);
+      let webhookEvent;
+      if (entry.standby){
+        webhookEvent = entry.standby[0];
+      }else{
+        webhookEvent = entry.messaging[0];
+      }
+      console.log("HZTest "+webhookEvent.);
 
       // Discard uninteresting events
       if ("read" in webhookEvent) {
