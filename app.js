@@ -10,14 +10,13 @@
 
 "use strict";
 
-const Response = require("./response");
-
 // Imports dependencies and set up http server
 const express = require("express"),
   { urlencoded, json } = require("body-parser"),
   crypto = require("crypto"),
   path = require("path"),
   Receive = require("./services/receive"),
+    Response = require("./services/response"),
   GraphAPi = require("./services/graph-api"),
   User = require("./services/user"),
   config = require("./services/config"),
