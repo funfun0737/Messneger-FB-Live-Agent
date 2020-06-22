@@ -79,31 +79,6 @@ app.post("/webhook", (req, res) => {
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
-      if ("changes" in entry) {
-        // Handle Page Changes event
-        let receiveMessage = new Receive();
-        if (entry.changes[0].field === "feed") {
-          let change = entry.changes[0].value;
-          switch (change.item) {
-            case "post":
-              return receiveMessage.handlePrivateReply(
-                "post_id",
-                change.post_id
-              );
-              break;
-            case "comment":
-              return receiveMessage.handlePrivateReply(
-                "commentgity _id",
-                change.comment_id
-              );
-              break;
-            default:
-              console.log('Unsupported feed change type.');
-              return;
-          }
-        }
-      }
-
       // Gets the body of the webhook event
       let webhookEvent;
       if (entry.standby){
@@ -112,7 +87,7 @@ app.post("/webhook", (req, res) => {
         webhookEvent = entry.messaging[0];
       }
       console.log("HZTest webhookEvent "+webhookEvent);
-
+    });
   } else {
     // Returns a '404 Not Found' if event is not from a page subscription
     res.sendStatus(404);
