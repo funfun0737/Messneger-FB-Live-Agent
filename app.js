@@ -111,7 +111,7 @@ app.post("/webhook", (req, res) => {
       }else{
         webhookEvent = entry.messaging[0];
       }
-      console.log("HZTest "+webhookEvent.);
+      console.log("HZTest webhookEvent "+webhookEvent);
 
       // Discard uninteresting events
       if ("read" in webhookEvent) {
