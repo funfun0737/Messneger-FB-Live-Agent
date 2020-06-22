@@ -83,10 +83,11 @@ app.post("/webhook", (req, res) => {
       let webhookEvent;
       if (entry.standby){
         webhookEvent = entry.standby[0];
+        console.log("HZTest webhookEvent standby"+webhookEvent);
       }else{
         webhookEvent = entry.messaging[0];
+        console.log("HZTest webhookEvent messaging"+webhookEvent);
       }
-      console.log("HZTest webhookEvent "+webhookEvent);
     });
   } else {
     // Returns a '404 Not Found' if event is not from a page subscription
