@@ -82,50 +82,47 @@ app.post("/webhook", (req, res) => {
     body.entry.forEach(function(entry) {
       // Gets the body of the webhook event
       let webhookEvent;
-      if (entry.standby){
-        webhookEvent = entry.standby[0];
-        console.log("HZTest webhookEvent standby"+webhookEvent);
-      }else{
+      if (entry.messaging) {
         webhookEvent = entry.messaging[0];
-        console.log("HZTest webhookEvent messaging"+webhookEvent);
-      }
+        console.log("HZTest webhookEvent messaging" + webhookEvent);
 
-      // Get the sender PSID
-      let senderPsid = webhookEvent.sender.id;
+        // Get the sender PSID
+        let senderPsid = webhookEvent.sender.id;
 
-      if (!(senderPsid in users)) {
-        let user = new User(senderPsid);
+        if (!(senderPsid in users)) {
+          let user = new User(senderPsid);
 
-        GraphAPi.getUserProfile(senderPsid)
-            .then(userProfile => {
-              user.setProfile(userProfile);
-            })
-            .catch(error => {
-              // The profile is unavailable
-              console.log("Profile is unavailable:", error);
-            })
-            .finally(() => {
-              users[senderPsid] = user;
-              i18n.setLocale(user.locale);
-              console.log(
-                  "New Profile PSID:",
-                  senderPsid,
-                  "with locale:",
-                  i18n.getLocale()
-              );
-              let receiveMessage = new Receive(users[senderPsid], webhookEvent);
-              return receiveMessage.handleMessage();
-            });
-      } else {
-        i18n.setLocale(users[senderPsid].locale);
-        console.log(
-            "Profile already exists PSID:",
-            senderPsid,
-            "with locale:",
-            i18n.getLocale()
-        );
-        let receiveMessage = new Receive(users[senderPsid], webhookEvent);
-        return receiveMessage.handleMessage();
+          GraphAPi.getUserProfile(senderPsid)
+              .then(userProfile => {
+                user.setProfile(userProfile);
+              })
+              .catch(error => {
+                // The profile is unavailable
+                console.log("Profile is unavailable:", error);
+              })
+              .finally(() => {
+                users[senderPsid] = user;
+                i18n.setLocale(user.locale);
+                console.log(
+                    "New Profile PSID:",
+                    senderPsid,
+                    "with locale:",
+                    i18n.getLocale()
+                );
+                let receiveMessage = new Receive(users[senderPsid], webhookEvent);
+                return receiveMessage.handleMessage();
+              });
+        } else {
+          i18n.setLocale(users[senderPsid].locale);
+          console.log(
+              "Profile already exists PSID:",
+              senderPsid,
+              "with locale:",
+              i18n.getLocale()
+          );
+          let receiveMessage = new Receive(users[senderPsid], webhookEvent);
+          return receiveMessage.handleMessage();
+        }
       }
     });
   } else {

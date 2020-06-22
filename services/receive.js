@@ -55,8 +55,6 @@ module.exports = class Receive {
       };
     }
 
-    // responses = Response.genText("Hi I'm Yuki, wanna talk?");
-
     if (Array.isArray(responses)) {
       let delay = 0;
       for (let response of responses) {
