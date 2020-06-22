@@ -113,55 +113,6 @@ app.post("/webhook", (req, res) => {
       }
       console.log("HZTest webhookEvent "+webhookEvent);
 
-      // Discard uninteresting events
-      if ("read" in webhookEvent) {
-        // console.log("Got a read event");
-        return;
-      }
-
-      if ("delivery" in webhookEvent) {
-        // console.log("Got a delivery event");
-        return;
-      }
-
-      // Get the sender PSID
-      let senderPsid = webhookEvent.sender.id;
-
-      if (!(senderPsid in users)) {
-        let user = new User(senderPsid);
-
-        GraphAPi.getUserProfile(senderPsid)
-          .then(userProfile => {
-            user.setProfile(userProfile);
-          })
-          .catch(error => {
-            // The profile is unavailable
-            console.log("Profile is unavailable:", error);
-          })
-          .finally(() => {
-            users[senderPsid] = user;
-            i18n.setLocale(user.locale);
-            console.log(
-              "New Profile PSID:",
-              senderPsid,
-              "with locale:",
-              i18n.getLocale()
-            );
-            let receiveMessage = new Receive(users[senderPsid], webhookEvent);
-            return receiveMessage.handleMessage();
-          });
-      } else {
-        i18n.setLocale(users[senderPsid].locale);
-        console.log(
-          "Profile already exists PSID:",
-          senderPsid,
-          "with locale:",
-          i18n.getLocale()
-        );
-        let receiveMessage = new Receive(users[senderPsid], webhookEvent);
-        return receiveMessage.handleMessage();
-      }
-    });
   } else {
     // Returns a '404 Not Found' if event is not from a page subscription
     res.sendStatus(404);
