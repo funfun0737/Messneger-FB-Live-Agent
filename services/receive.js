@@ -33,19 +33,9 @@ module.exports = class Receive {
 
     try {
       if (event.message) {
-        let message = event.message;
-
-        if (message.quick_reply) {
-          responses = this.handleQuickReply();
-        } else if (message.attachments) {
-          responses = this.handleAttachmentMessage();
-        } else if (message.text) {
+        if (message.text) {
           responses = this.handleTextMessage();
         }
-      } else if (event.postback) {
-        responses = this.handlePostback();
-      } else if (event.referral) {
-        responses = this.handleReferral();
       }
     } catch (error) {
       console.error(error);
@@ -80,11 +70,8 @@ module.exports = class Receive {
 
     let response;
 
-    if (
-      (greeting && greeting.confidence > 0.8) ||
-      message.includes("start over")
-    ) {
-      response = Response.genNuxMessage(this.user);
+    if (message.text.trim() === "done") {
+      setTimeout(() => GraphAPi.callSendAPI(this.sendPassThread(this.user.psid)));
     } else if (message.includes("take a survey")) {
       response = Survey.startASurvey();
     } else if (Number(message)) {
@@ -158,6 +145,29 @@ module.exports = class Receive {
       payload = postback.payload;
     }
     return this.handlePayload(payload.toUpperCase());
+  }
+
+  sendPassThread(senderId) {
+    request(
+        {
+          uri: "https://graph.facebook.com/v2.6/me/pass_thread_control",
+          qs: { access_token: EAAEedv38DeYBAO9H59uGIRs1ZCpK9y43pewxcSb3MNq5GZCXzGZAlWFpe2upE7VCCGMU2P47TZBa9aGrNifPjzh6atWfkTZAtCnGhnWjCWx7KtdrU9XXBjoRhAFqXLQZBJmjH6WdhRGtrKyEpBl1uKL6EeKRHiCXecEEfllJCrl6ZAro6GsjZBG7 },
+          method: "POST",
+          json: {
+            recipient: {
+              id: senderId
+            },
+            target_app_id: 314971392839142
+          }
+        },
+        (err, res, body) => {
+          if (err || body.error) {
+            console.log("UNABLE TO SEND PASS THREAD REQUEST", err || body.error);
+          } else {
+            console.log("PASSED THREAD TO MESSAGE DASHBOARD BOT");
+          }
+        }
+    );
   }
 
   // Handles referral events
