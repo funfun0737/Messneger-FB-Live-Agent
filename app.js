@@ -10,6 +10,8 @@
 
 "use strict";
 
+const Response = require("./response");
+
 // Imports dependencies and set up http server
 const express = require("express"),
   { urlencoded, json } = require("body-parser"),
